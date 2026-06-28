@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: torres_imobiliaria_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: torres_imobiliaria
+    ports:
+      - "5432:5432"
+    volumes:
+      - torres_db_data:/var/lib/postgresql/data
+
+volumes:
+  torres_db_data:

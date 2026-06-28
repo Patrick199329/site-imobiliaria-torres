@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum TipoImovel {
+  APARTAMENTO
+  CASA
+  TERRENO
+  COMERCIAL
+}
+
+enum TipoTransacao {
+  VENDA
+}
+
+enum StatusImovel {
+  DISPONIVEL
+  RESERVADO
+  VENDIDO
+}
+
+enum FaseObra {
+  LANCAMENTO
+  EM_CONSTRUCAO
+  PRONTO
+}
+
+enum StatusUnidade {
+  DISPONIVEL
+  RESERVADA
+  VENDIDA
+}
+
+enum TipoLead {
+  INTERESSE_COMPRA
+  AVALIACAO_VENDA
+}
+
+enum RoleUsuario {
+  ADMIN
+  CORRETOR
+}
+
+enum OrigemLead {
+  SITE
+  WHATSAPP
+  PORTAL_ZAP
+  PORTAL_VIVAREAL
+  PORTAL_OLX
+  MANUAL
+}
+
+enum StatusLead {
+  NOVO
+  EM_ANDAMENTO
+  CONVERTIDO
+  PERDIDO
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model Corretor {
+  id        String   @id @default(cuid())
+  nome      String
+  creci     String
+  foto      String?
+  bio       String?
+  email     String   @unique
+  telefone  String
+  whatsapp  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  imoveis Imovel[]
+  posts   Post[]
+}
+
+model Imovel {
+  id               String        @id @default(cuid())
+  codigo           Int?          @unique @default(autoincrement())
+  titulo           String
+  slug             String        @unique
+  tipo             TipoImovel
+  transacao        TipoTransacao @default(VENDA)
+  status           StatusImovel  @default(DISPONIVEL)
+  preco            Decimal       @db.Decimal(12, 2)
+  areaUtil         Decimal?      @db.Decimal(8, 2)
+  areaTotal        Decimal?      @db.Decimal(8, 2)
+  quartos          Int?
+  suites           Int?
+  vagas            Int?
+  valorCondominio  Decimal?      @db.Decimal(10, 2)
+  valorIptu        Decimal?      @db.Decimal(10, 2)
+  descricao        String
+  endereco         String
+  bairro           String
+  cidade           String
+  uf               String        @db.Char(2)
+  cep              String        @db.Char(9)
+  latitude         Decimal?      @db.Decimal(10, 7)
+  longitude        Decimal?      @db.Decimal(10, 7)
+  destaque         Boolean       @default(false)
+  corretorId       String
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  corretor        Corretor          @relation(fields: [corretorId], references: [id])
+  imagens         ImovelImagem[]
+  caracteristicas Caracteristica[]
+  leads           Lead[]            @relation("LeadPrincipal")
+  leadsInteresse  Lead[]            @relation("LeadImoveisInteresse")
+}
+
+model ImovelImagem {
+  id       String  @id @default(cuid())
+  imovelId String
+  url      String
+  ordem    Int     @default(0)
+  isCapa   Boolean @default(false)
+
+  imovel Imovel @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  @@index([imovelId, ordem])
+}
+
+model Caracteristica {
+  id   String @id @default(cuid())
+  nome String @unique
+
+  imoveis Imovel[]
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  nome      String
+  email     String
+  telefone  String
+  mensagem  String?
+  imovelId  String?
+  tipo      TipoLead
+  origem    OrigemLead @default(SITE)
+  status    StatusLead @default(NOVO)
+  createdAt DateTime   @default(now())
+
+  imovel           Imovel?  @relation("LeadPrincipal", fields: [imovelId], references: [id], onDelete: SetNull)
+  imoveisInteresse Imovel[] @relation("LeadImoveisInteresse")
+}
+
+model Lancamento {
+  id                   String   @id @default(cuid())
+  codigo               String?  @unique
+  nome                 String
+  slug                 String   @unique
+  construtora          String
+  descricao            String
+  faseObra             FaseObra
+  dataPrevistaEntrega  DateTime?
+  endereco             String
+  bairro               String
+  cidade               String
+  uf                   String   @db.Char(2)
+  latitude             Decimal? @db.Decimal(10, 7)
+  longitude            Decimal? @db.Decimal(10, 7)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  unidades LancamentoUnidade[]
+  imagens  LancamentoImagem[]
+}
+
+model LancamentoImagem {
+  id           String @id @default(cuid())
+  lancamentoId String
+  url          String
+  ordem        Int    @default(0)
+  isCapa       Boolean @default(false)
+
+  lancamento Lancamento @relation(fields: [lancamentoId], references: [id], onDelete: Cascade)
+}
+
+model LancamentoUnidade {
+  id             String        @id @default(cuid())
+  lancamentoId   String
+  tipologia      String
+  areaPrivativa  Decimal       @db.Decimal(8, 2)
+  valor          Decimal       @db.Decimal(12, 2)
+  status         StatusUnidade @default(DISPONIVEL)
+  bloco          String?
+  andar          Int?
+
+  lancamento Lancamento @relation(fields: [lancamentoId], references: [id], onDelete: Cascade)
+}
+
+model ConfiguracaoSistema {
+  chave     String   @id
+  valor     String
+  updatedAt DateTime @updatedAt
+}
+
+model Usuario {
+  id        String      @id @default(cuid())
+  nome      String
+  email     String      @unique
+  senha     String
+  role      RoleUsuario @default(CORRETOR)
+  ativo     Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Post {
+  id              String    @id @default(cuid())
+  titulo          String
+  slug            String    @unique
+  conteudo        String
+  capa            String?
+  autorId         String
+  metaTitle       String?
+  metaDescription String?
+  publicadoEm     DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  autor Corretor @relation(fields: [autorId], references: [id])
+}

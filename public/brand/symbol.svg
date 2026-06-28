@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 74" fill="none" role="img" aria-label="Tôrres Imobiliária — símbolo">
+  <!--
+    Símbolo "T"-skyline da Tôrres Imobiliária
+    Versão flat/vetorizada — sem sombra, sem textura 3D
+    Uso: favicon, ícone de app, contextos pequenos
+
+    Lógica: 9 colunas verticais bottom-aligned formando o perfil de um skyline.
+    As 3 colunas centrais são as mais altas (haste do T),
+    as 3 à esquerda e 3 à direita são médias e variadas (travessão do T).
+    Uma curva suave na base referencia o horizonte.
+  -->
+
+  <!-- Grupo: colunas do skyline, alinhadas na base y=62 -->
+
+  <!-- Esquerda do travessão -->
+  <rect x="0"  y="42" width="6" height="20" fill="#BD8338" rx="1"/>
+  <rect x="8"  y="36" width="6" height="26" fill="#BD8338" rx="1"/>
+  <rect x="16" y="40" width="6" height="22" fill="#BD8338" rx="1"/>
+
+  <!-- Haste central — as mais altas -->
+  <rect x="24" y="10" width="6" height="52" fill="#BD8338" rx="1"/>
+  <rect x="32" y="2"  width="6" height="60" fill="#BD8338" rx="1"/>
+  <rect x="40" y="10" width="6" height="52" fill="#BD8338" rx="1"/>
+
+  <!-- Direita do travessão -->
+  <rect x="48" y="40" width="6" height="22" fill="#BD8338" rx="1"/>
+  <rect x="56" y="36" width="6" height="26" fill="#BD8338" rx="1"/>
+  <rect x="64" y="42" width="6" height="20" fill="#BD8338" rx="1"/>
+
+  <!-- Linha curva de horizonte na base -->
+  <path d="M0 62 Q35 72 70 62" stroke="#BD8338" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>
