@@ -11,6 +11,8 @@ import { prisma } from '@/lib/prisma'
 import type { ComprarParams } from '@/types/search'
 import { PER_PAGE } from '@/types/search'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Comprar imóvel',
   description:

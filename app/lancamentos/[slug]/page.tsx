@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui'
 import { prisma } from '@/lib/prisma'
 import type { BadgeVariant } from '@/components/ui'
 
+export const dynamic = 'force-dynamic'
+
 const FASE_BADGE: Record<string, BadgeVariant> = {
   LANCAMENTO: 'lancamento',
   EM_CONSTRUCAO: 'construcao',

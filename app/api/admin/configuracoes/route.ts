@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 const CHAVES_PERMITIDAS = ['GOOGLE_MAPS_KEY'] as const
 type ChavePermitida = (typeof CHAVES_PERMITIDAS)[number]
 

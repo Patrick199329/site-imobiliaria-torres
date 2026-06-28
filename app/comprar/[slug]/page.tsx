@@ -12,6 +12,8 @@ import { prisma } from '@/lib/prisma'
 import { getConfig } from '@/lib/config'
 import { formatCurrency, formatArea } from '@/lib/format'
 
+export const dynamic = 'force-dynamic'
+
 const TIPO_LABEL: Record<string, string> = {
   APARTAMENTO: 'Apartamento',
   CASA: 'Casa',

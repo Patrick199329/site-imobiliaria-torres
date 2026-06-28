@@ -7,6 +7,8 @@ import { Team } from '@/components/home/Team'
 import { BlogPreview } from '@/components/home/BlogPreview'
 import { SellCTA } from '@/components/home/SellCTA'
 
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   return (
     <>

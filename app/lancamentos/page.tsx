@@ -7,6 +7,8 @@ import { EmptyState } from '@/components/ui'
 import { prisma } from '@/lib/prisma'
 import type { FaseObra } from '@prisma/client'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Lançamentos',
   description:

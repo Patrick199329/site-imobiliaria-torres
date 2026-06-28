@@ -6,6 +6,8 @@ import { Footer } from '@/components/layout/Footer'
 import { PropertyCard } from '@/components/home/PropertyCard'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const c = await prisma.corretor.findUnique({ where: { id: params.id } })
   if (!c) return { title: 'Corretor não encontrado' }
